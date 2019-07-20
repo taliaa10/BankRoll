@@ -212,6 +212,7 @@ h2 {
 
 .item__description {
     float: left;
+    text-transform: capitalize;
 }
 
 .item__value {
