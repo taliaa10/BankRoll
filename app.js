@@ -30,7 +30,9 @@ let budgetController = (() => {
         totals: {
             exp: 0,
             inc: 0
-        }
+        },
+        budget: 0,
+        percentage: -1
     }
 
     return {
@@ -59,12 +61,15 @@ let budgetController = (() => {
 
         calculateBudget: () => {
             
-            // calculate total income and expenses
-
+            // calculate total income and expenses    
+            calculateTotal('exp')
+            calculateTotal('inc')
 
             // calculate the budget: income - expenses
+            data.budget = data.totals.inc - data.totals.exp
 
             // calculate the percentage of income that we spent
+            data.percentage = data.totals.exp / data.totals.inc
         },
 
         testing: () => {
@@ -162,8 +167,6 @@ let controller = (function(budgetCtrl, UICtrl) {
     let updateBudget = () => {
 
         // 1. Calculate the budget
-        calculateTotal('exp')
-        calculateTotal('inc')
 
         // 2. Return the budget
 
