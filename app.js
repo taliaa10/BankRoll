@@ -13,7 +13,15 @@ let budgetController = (() => {
         this.value = value
     }
 
+    let calculateTotal = (type) => {
+        let sum = 0
+        data.allItems[type].forEach((cur) => {
+            sum += cur.value
+        })
+        data.totals[type] = sum
+    }
 
+    // Global data structure
     let data = {
         allItems: {
             exp: [],
@@ -47,6 +55,16 @@ let budgetController = (() => {
             data.allItems[type].push(newItem)
             return newItem
 
+        },
+
+        calculateBudget: () => {
+            
+            // calculate total income and expenses
+
+
+            // calculate the budget: income - expenses
+
+            // calculate the percentage of income that we spent
         },
 
         testing: () => {
@@ -144,6 +162,8 @@ let controller = (function(budgetCtrl, UICtrl) {
     let updateBudget = () => {
 
         // 1. Calculate the budget
+        calculateTotal('exp')
+        calculateTotal('inc')
 
         // 2. Return the budget
 
