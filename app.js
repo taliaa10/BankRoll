@@ -69,12 +69,26 @@ let budgetController = (() => {
             data.budget = data.totals.inc - data.totals.exp
 
             // calculate the percentage of income that we spent
-            data.percentage = data.totals.exp / data.totals.inc
+            if (data.totals.inc > 0) {
+                data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100)
+            } else {
+                data.percentage = -1
+            }
+        },
+
+        getBudget: () => {
+            return {
+                budget: data.budget,
+                totalInc: data.totals.inc,
+                totalExp: data.totals.exp,
+                percentage: data.percentage
+            }
         },
 
         testing: () => {
             console.log(data)
         }
+
     }
 
 })()
@@ -90,7 +104,11 @@ let UIController = (() => {
         inputValue: '.add__value',
         inputBtn: '.add__btn',
         incomeContainer: '.income__list',
-        expensesContainer: '.expenses__list'
+        expensesContainer: '.expenses__list',
+        budgetLabel: '.budget__value',
+        incomeLabel: '.budget__income--value',
+        expensesLabel: '.budget__expenses--value',
+        percentageLabel: '.budget__expenses--percentage'
     }
 
     return {
@@ -140,6 +158,22 @@ let UIController = (() => {
             fieldsArr[0].focus()
         },
 
+        displayBudget: (obj) => {
+
+            document.querySelector(DOMstrings.budgetLabel).textContent = obj.budget
+            document.querySelector(DOMstrings.incomeLabel).textContent = obj.totalInc
+            document.querySelector(DOMstrings.expensesLabel).textContent = obj.totalExp
+
+
+            if (obj.percentage > 0) {
+                document.querySelector(DOMstrings.percentageLabel).textContent = obj.percentage + '%'
+            } else {
+                document.querySelector(DOMstrings.percentageLabel).textContent = '---'
+            }
+
+
+        },
+
         getDOMstrings: () => {
             return DOMstrings
         }
@@ -167,10 +201,13 @@ let controller = (function(budgetCtrl, UICtrl) {
     let updateBudget = () => {
 
         // 1. Calculate the budget
+        budgetCtrl.calculateBudget()
 
         // 2. Return the budget
+        let budget = budgetCtrl.getBudget()
 
         // 3. Display the budget on the UI
+        UICtrl.displayBudget(budget)
     }
 
     let ctrlAddItem = () => {
@@ -201,6 +238,12 @@ let controller = (function(budgetCtrl, UICtrl) {
     return {
         init: () => {
             console.log("the application has started")
+            UICtrl.displayBudget({
+                budget: 0,
+                totalInc: 0,
+                totalExp: 0,
+                percentage: -1
+            })
             setUpEventListeners()
         }
     }
