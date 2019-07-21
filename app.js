@@ -152,7 +152,7 @@ let UIController = (() => {
         expensesLabel: '.budget__expenses--value',
         percentageLabel: '.budget__expenses--percentage',
         container: '.container',
-        expensesPercLabel: '.item__percentage'
+        expensesPercLabel: '.item__percentage',
     }
 
     return {
@@ -261,6 +261,12 @@ let controller = ((budgetCtrl, UICtrl) => {
     let setUpEventListeners = () => {
 
         let DOM = UICtrl.getDOMstrings()
+
+        document.querySelector(DOM.inputDescription).addEventListener('keypress', (e) => {
+            if ((document.querySelector(DOM.inputDescription).value !== "") && (e.keyCode === 13 || e.which === 13)) {
+                document.querySelector(DOM.inputValue).focus()
+            }
+        })
 
         document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem)
 
