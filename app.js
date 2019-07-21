@@ -59,6 +59,20 @@ let budgetController = (() => {
 
         },
 
+        deleteItem: (type, id) => {
+            let ids, index
+
+            ids = data.allItems[type].map((current) => {
+                return current.id
+            })
+
+            index = ids.indexOf(id)
+
+            if (index !== -1) {
+                data.allItems[type].splice(index, 1)
+            }
+        },
+
         calculateBudget: () => {
             
             // calculate total income and expenses    
@@ -161,7 +175,7 @@ let UIController = (() => {
 
         displayBudget: (obj) => {
 
-            document.querySelector(DOMstrings.budgetLabel).textContent = obj.budget
+            document.querySelector(DOMstrings.budgetLabel).textContent = '$' + obj.budget
             document.querySelector(DOMstrings.incomeLabel).textContent = obj.totalInc
             document.querySelector(DOMstrings.expensesLabel).textContent = obj.totalExp
 
@@ -237,7 +251,7 @@ let controller = (function(budgetCtrl, UICtrl) {
     }
 
     let ctrlDeleteItem = (e) => {
-        let itemID, type, ID
+        let itemID, splitID, type, ID
 
         itemID = event.target.parentNode.parentNode.parentNode.parentNode.id
 
@@ -245,9 +259,10 @@ let controller = (function(budgetCtrl, UICtrl) {
 
             splitID = itemID.split('-')
             type = splitID[0]
-            ID = splitID[1]
+            ID = parseInt(splitID[1])
 
             // 1. Delete the item from the data structure
+            budgetCtrl.deleteItem(type, ID)
 
             // 2. Delete the item from the UI
 
