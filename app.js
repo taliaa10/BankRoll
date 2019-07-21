@@ -111,7 +111,7 @@ let budgetController = (() => {
 // UI CONTROLLER
 let UIController = (() => {
 
-    // Object for private variables 
+    // Object for private DOM variables 
     let DOMstrings = {
         inputType: '.add__type',
         inputDescription: '.add__description',
@@ -159,6 +159,13 @@ let UIController = (() => {
 
         },
 
+        deleteListItem: (selectorID) => {
+            let el = document.getElementById(selectorID)
+
+            el.parentNode.removeChild(el)
+
+        },
+
         clearFields: () => {
             let fields, fieldsArr
 
@@ -185,8 +192,6 @@ let UIController = (() => {
             } else {
                 document.querySelector(DOMstrings.percentageLabel).textContent = '---'
             }
-
-
         },
 
         getDOMstrings: () => {
@@ -265,16 +270,16 @@ let controller = (function(budgetCtrl, UICtrl) {
             budgetCtrl.deleteItem(type, ID)
 
             // 2. Delete the item from the UI
+            UICtrl.deleteListItem(itemID)
 
             // 3. Update and show the new budget
-
+            updateBudget()
         }
 
     }
 
     return {
         init: () => {
-            console.log("the application has started")
             UICtrl.displayBudget({
                 budget: 0,
                 totalInc: 0,
